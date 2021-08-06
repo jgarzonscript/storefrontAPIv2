@@ -1,0 +1,8 @@
+{
+    "dev": {
+        "driver": "pg",
+        "host": "127.0.0.1",
+        "database": "cart_project",
+        "user": "full_stack_john"
+    }
+}
