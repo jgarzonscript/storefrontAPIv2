@@ -10,9 +10,10 @@ class Config {
     private USER = 'POSTGRES_USER';
     private DATABASE = 'POSTGRES_DB';
     private DATABASE_DEV = 'POSTGRES_DB_DEV';
-    // private BCRYPT = 'BCRYPT_PASSWORD';
-    // private SALT = 'SALT_ROUNDS';
-    // private TOKENSECRET = 'TOKEN_SECRET';
+
+    private BCRYPT = 'BCRYPT_PASSWORD';
+    private SALT = 'SALT_ROUNDS';
+    private TOKENSECRET = 'TOKEN_SECRET';
 
     get env(): string {
         return String(process.env[this.ENVIRONMENT]);
@@ -32,6 +33,18 @@ class Config {
             db = String(process.env[this.DATABASE_DEV]);
         }
         return db;
+    }
+
+    get pepper(): string {
+        return String(process.env[this.BCRYPT]);
+    }
+
+    get saltRounds(): string {
+        return String(process.env[this.SALT]);
+    }
+
+    get tokenSecret(): string {
+        return String(process.env[this.TOKENSECRET]);
     }
 }
 
