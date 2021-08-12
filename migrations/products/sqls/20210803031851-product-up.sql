@@ -4,7 +4,8 @@ CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     price INTEGER NOT NULL,
-    category_id BIGINT REFERENCES category (id)
+    category_id BIGINT REFERENCES category (id),
+    seen INTEGER
 );
 
 /* insert statements for dog products */
