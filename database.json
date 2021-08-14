@@ -4,5 +4,11 @@
         "host": "127.0.0.1",
         "database": "cart_project",
         "user": "full_stack_john"
+    },
+    "test": {
+        "driver": "pg",
+        "host": { "ENV": "POSTGRES_HOST" },
+        "database": { "ENV": "test_POSTGRES_DB" },
+        "user": { "ENV": "POSTGRES_USER" }
     }
 }
