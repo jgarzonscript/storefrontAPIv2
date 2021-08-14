@@ -5,6 +5,7 @@ import { port } from '../config';
 import productRoutes from './handlers/products';
 import userRoutes from './handlers/users';
 import orderRoutes from './handlers/orders';
+import categoryRoutes from './handlers/category';
 
 import { config } from '../config';
 
@@ -17,12 +18,13 @@ app.use(cors({ origin: '*' }));
 app.use(express.json() as RequestHandler);
 
 app.get('/', function (req: Request, res: Response) {
-    res.send('Hello World!');
+    res.send(config.database);
 });
 
 productRoutes(app);
 userRoutes(app);
 orderRoutes(app);
+categoryRoutes(app);
 
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`);
