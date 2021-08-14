@@ -3,4 +3,3 @@ build
 .env
 dist/
 types/
-tests/
