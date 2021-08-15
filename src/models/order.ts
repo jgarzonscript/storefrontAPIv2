@@ -27,4 +27,20 @@ export class OrderStore {
             throw e;
         }
     }
+
+    async create(userId: string): Promise<Order> {
+        try {
+            const sql = 'INSERT INTO orders (status, user_id) VALUES ($1, $2) RETURNING *',
+                conn = await client.connect(),
+                result = await conn.query(sql, ['active', userId]);
+
+            const newOrder = result.rows[0];
+            conn.release();
+            return newOrder;
+        } catch (error) {
+            const e = new Error(`unable to create order > ${error.message}`);
+            e.stack = (error as Error).stack;
+            throw e;
+        }
+    }
 }
