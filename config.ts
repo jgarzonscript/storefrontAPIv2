@@ -15,6 +15,7 @@ class Config {
     private BCRYPT = 'BCRYPT_PASSWORD';
     private SALT = 'SALT_ROUNDS';
     private TOKENSECRET = 'TOKEN_SECRET';
+    private SIGNEDTOKEN = 'TOKEN_SIGNED';
 
     get env(): string {
         return String(process.env[this.ENVIRONMENT]);
@@ -54,6 +55,10 @@ class Config {
 
     get tokenSecret(): string {
         return String(process.env[this.TOKENSECRET]);
+    }
+
+    get signedToken(): string {
+        return String(process.env[this.SIGNEDTOKEN]);
     }
 }
 
