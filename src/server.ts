@@ -18,7 +18,7 @@ app.use(cors({ origin: '*' }));
 app.use(express.json() as RequestHandler);
 
 app.get('/', function (req: Request, res: Response) {
-    res.send(config.database);
+    res.send('hello world');
 });
 
 productRoutes(app);
@@ -29,3 +29,5 @@ categoryRoutes(app);
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`);
 });
+
+export default app;
