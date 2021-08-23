@@ -23,6 +23,8 @@ Start-up the server
 
 ```
 yarn watch
+or
+yarn start
 ```
 
 You should now have access to the api server via all endpoints in the requirements file
