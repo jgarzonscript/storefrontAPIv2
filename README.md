@@ -43,9 +43,11 @@ lets write down our setup so we can configure the environmental variables in our
 
 ### Setup our environmental variables and connection strings
 
-Inside our project, open the file: .env.dummy
-let's rename this file to be: .env
-now lets configure it afer the renaming
+Inside our project,
+
+-   open the file '.env.dummy'
+-   let's rename this file to be only '.env'
+-   now lets configure it
 
 set the following values to the keys:
 
