@@ -35,11 +35,11 @@ CREATE DATABASE full_stack_test;
 GRANT ALL PRIVILEGES ON DATABASE full_stack_test TO full_stack_user;
 ```
 
-lets write down our setup so we can configure the environmental variables to our porject.
+lets write down our setup so we can configure the environmental variables in our project.
 
-user = full_stack_user
-dev database = full_stack_dev
-test database = full_stack_test
+-   user = full_stack_user
+-   dev database = full_stack_dev
+-   test database = full_stack_test
 
 ### Setup our environmental variables and connection strings
 
