@@ -5,8 +5,12 @@ import { verifyAuthToken } from '../util/middleware';
 const store = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
-    const products = await store.index();
-    res.json(products);
+    try {
+        const products = await store.index();
+        res.json(products);
+    } catch (error) {
+        res.status(400).json(error.message);
+    }
 };
 
 const create = async (req: Request, res: Response) => {

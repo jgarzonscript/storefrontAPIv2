@@ -6,11 +6,12 @@ export const port = process.env.PORT;
 
 class Config {
     private ENVIRONMENT = 'ENV';
-    private HOST = 'POSTGRES_HOST';
-    private USER = 'POSTGRES_USER';
-    private DATABASE = 'POSTGRES_DB';
-    private DATABASE_DEV = 'POSTGRES_DB_DEV';
-    private DATABASE_TEST = 'test_POSTGRES_DB';
+    private HOST = 'PG_HOST';
+    private USER = 'PG_USER';
+    private DATABASE = 'PG_DB';
+    private PASS = 'PG_PWD';
+    // private DATABASE_DEV = 'POSTGRES_DB_DEV';
+    private DATABASE_TEST = 'PG_DB_TEST';
 
     private BCRYPT = 'BCRYPT_PASSWORD';
     private SALT = 'SALT_ROUNDS';
@@ -29,13 +30,12 @@ class Config {
         return String(process.env[this.USER]);
     }
 
+    get pass(): string {
+        return String(process.env[this.PASS]);
+    }
+
     get database(): string {
         let db = String(process.env[this.DATABASE]);
-
-        // retrieves dev database if environment is 'dev'
-        if (this.env === 'dev' && process.env[this.DATABASE_DEV]) {
-            db = String(process.env[this.DATABASE_DEV]);
-        }
 
         // retrieves test database if environment is 'test'
         if (this.env.toLowerCase() === 'test' && process.env[this.DATABASE_TEST]) {

@@ -15,7 +15,12 @@
         "migratedown": "yarn run migratedown-orders && yarn run migratedown-users && yarn run migratedown-products",
         "migratedown-orders": "db-migrate down:orders -e test -c 2",
         "migratedown-users": "db-migrate down:users -e test",
-        "migratedown-products": "db-migrate down:products -e test -c 2"
+        "migratedown-products": "db-migrate down:products -e test -c 2",
+        "create-dba": "db-migrate up:all",
+        "destroy-dba": "yarn run destroy-orders && yarn run destroy-users && yarn run destroy-products",
+        "destroy-orders": "db-migrate down:orders -c 2",
+        "destroy-users": "db-migrate down:users",
+        "destroy-products": "db-migrate down:products -c 2"
     },
     "author": "Udacity",
     "license": "ISC",

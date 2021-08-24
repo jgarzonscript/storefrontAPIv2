@@ -1,14 +1,16 @@
 {
     "dev": {
         "driver": "pg",
-        "host": "127.0.0.1",
-        "database": "cart_project",
-        "user": "full_stack_john"
+        "host": { "ENV": "PG_HOST" },
+        "database": { "ENV": "PG_DB" },
+        "user": { "ENV": "PG_USER" },
+        "password": { "ENV": "PG_PWD" }
     },
     "test": {
         "driver": "pg",
-        "host": { "ENV": "POSTGRES_HOST" },
-        "database": { "ENV": "test_POSTGRES_DB" },
-        "user": { "ENV": "POSTGRES_USER" }
+        "host": { "ENV": "PG_HOST" },
+        "database": { "ENV": "PG_DB_TEST" },
+        "user": { "ENV": "PG_USER" },
+        "password": { "ENV": "PG_PWD" }
     }
 }

@@ -4,5 +4,6 @@ import { config } from '../config';
 export const client = new Pool({
     user: config.user,
     host: config.host,
-    database: config.database
+    database: config.database,
+    password: config.pass
 });
