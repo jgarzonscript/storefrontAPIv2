@@ -20,7 +20,8 @@
         "destroy-dba": "yarn run destroy-orders && yarn run destroy-users && yarn run destroy-products",
         "destroy-orders": "db-migrate down:orders -c 2",
         "destroy-users": "db-migrate down:users",
-        "destroy-products": "db-migrate down:products -c 2"
+        "destroy-products": "db-migrate down:products -c 2",
+        "custom-test": "yarn run migrateup && ENV=test jasmine-ts tests/justTestSpec.ts"
     },
     "author": "Udacity",
     "license": "ISC",

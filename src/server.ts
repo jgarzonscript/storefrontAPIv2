@@ -1,4 +1,4 @@
-import express, { Request, RequestHandler, Response } from 'express';
+import express, { Request, RequestHandler, response, Response } from 'express';
 import bodyParser from 'body-parser';
 
 import { port } from '../config';
@@ -19,6 +19,16 @@ app.use(express.json() as RequestHandler);
 
 app.get('/', function (req: Request, res: Response) {
     res.send('hello world');
+});
+
+app.get('/test', (req: Request, res: Response) => {
+    try {
+        const environment = config.env;
+        const database = config.database;
+        res.json({ environment, database });
+    } catch (error) {
+        res.json(error);
+    }
 });
 
 productRoutes(app);
