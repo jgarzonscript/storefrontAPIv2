@@ -1,11 +1,13 @@
 import { client } from '../database';
 
 export type Product = {
-    id?: string;
+    id?: number;
     name: string;
     price: number;
-    categoryId: number;
+    categoryId?: number;
     seen?: number;
+    url?: string;
+    description?: string;
 };
 
 export class ProductStore {
@@ -18,7 +20,7 @@ export class ProductStore {
             return result.rows;
         } catch (error) {
             const e = new Error();
-            e.message = `unable to retrieve products > ${error.message}`;
+            e.message = `unable to retrieve products > ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }
@@ -27,20 +29,26 @@ export class ProductStore {
     async create(product: Product): Promise<Product> {
         try {
             const sql =
-                    'INSERT INTO products (name, price, category_id) VALUES ($1, $2, $3) RETURNING *',
+                    'INSERT INTO products (name, price, category_id, url, description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                 conn = await client.connect(),
-                result = await conn.query(sql, [product.name, product.price, product.categoryId]);
+                result = await conn.query(sql, [
+                    product.name,
+                    product.price,
+                    product.categoryId,
+                    product.url,
+                    product.description
+                ]);
             conn.release();
             const newProduct = result.rows[0];
             return newProduct;
         } catch (error) {
-            const e = new Error(`unable to create product > ${error.message}`);
+            const e = new Error(`unable to create product > ${(error as Error).message}`);
             e.stack = (error as Error).stack;
             throw e;
         }
     }
 
-    async show(id: string): Promise<Product> {
+    async show(id: number): Promise<Product> {
         try {
             const sql = 'select * from products where id = $1;',
                 conn = await client.connect(),
@@ -65,7 +73,33 @@ export class ProductStore {
 
             return product;
         } catch (error) {
-            const e = new Error(`unable to retrieve product [with id > ${id}] > ${error.message}`);
+            const e = new Error(
+                `unable to retrieve product [with id ${id}] > ${(error as Error).message}`
+            );
+            e.stack = (error as Error).stack;
+            throw e;
+        }
+    }
+
+    async update(product: Product): Promise<Product> {
+        try {
+            const sql =
+                    ' UPDATE products SET name = $1, price = $2, category_id = $3, url = $4, description = $5 WHERE id = $6 RETURNING *;',
+                conn = await client.connect(),
+                response = await conn.query(sql, [
+                    product.name,
+                    product.price,
+                    product.categoryId,
+                    product.url,
+                    product.description,
+                    product.id
+                ]);
+            conn.release();
+            const updatedProduct: Product = response.rows[0];
+            return updatedProduct;
+        } catch (error) {
+            const e = new Error();
+            e.message = `unable to update product ${product.id} > ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }
@@ -81,7 +115,7 @@ export class ProductStore {
             return products;
         } catch (error) {
             const e = new Error();
-            e.message = `unable to retrieve "popular" products > ${error.message}`;
+            e.message = `unable to retrieve "popular" products > ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }
@@ -97,7 +131,7 @@ export class ProductStore {
             return products;
         } catch (error) {
             const e = new Error();
-            e.message = `unable to retrieve products by category > ${error.message}`;
+            e.message = `unable to retrieve products by category > ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }
