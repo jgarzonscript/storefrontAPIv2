@@ -21,7 +21,7 @@ export class UserStore {
             return users;
         } catch (error) {
             const e = new Error();
-            e.message = `unable to get users > ${error.message}`;
+            e.message = `unable to retrieve users -- ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }
@@ -57,7 +57,7 @@ export class UserStore {
         } catch (error) {
             const e = new Error();
             e.message = `unable to create user > ${user.firstname + ' ' + user.lastname} > ${
-                error.message
+                (error as Error).message
             }`;
             e.stack = (error as Error).stack;
             throw e;
@@ -74,7 +74,46 @@ export class UserStore {
             return user;
         } catch (error) {
             const e = new Error();
-            e.message = `unable to get user > ${error.message}`;
+            e.message = `unable to retrieve user -- ${(error as Error).message}`;
+            e.stack = (error as Error).stack;
+            throw e;
+        }
+    }
+
+    /**
+     * @description confirms passwords match with user
+     * @param username
+     * @param password
+     * @returns user
+     */
+    async authenticate(username: string, password: string): Promise<User | null> {
+        try {
+            const sql = 'select * from users where username = ($1)',
+                conn = await client.connect(),
+                result = await conn.query(sql, [username]);
+
+            if (result.rows.length) {
+                const sqlObject = result.rows[0];
+                conn.release();
+
+                const user: User = {
+                    firstname: sqlObject['firstname'],
+                    lastname: sqlObject['lastname'],
+                    username: sqlObject['username'],
+                    password: sqlObject['password'],
+                    id: sqlObject['id']
+                };
+
+                if (bcrypt.compareSync(password + config.pepper, user.password)) {
+                    user.password = '';
+                    return user;
+                }
+            }
+
+            return null;
+        } catch (error) {
+            const e = new Error();
+            e.message = `unable to authenticate -- ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
         }

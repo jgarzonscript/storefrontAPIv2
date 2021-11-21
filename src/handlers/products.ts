@@ -1,15 +1,33 @@
 import express, { Request, Response } from 'express';
 import { Product, ProductStore } from '../models/product';
 import { verifyAuthToken } from '../util/middleware';
+import { apiResponse } from '../util/responses';
 
 const store = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
+    const response: apiResponse = {
+        success: false
+    };
+
     try {
-        const products = await store.index();
-        res.json(products);
+        const allProducts = await store.index();
+
+        if (!allProducts) {
+            response.message = 'nothing was returned -- product list is empty';
+            res.status(400);
+            res.json(response);
+            return;
+        }
+
+        response.success = true;
+        response.data = allProducts;
+        res.json(response);
     } catch (error) {
-        res.status(400).json((error as Error).message);
+        response.success = false;
+        response.error = error as Error;
+        response.message = (error as Error).message;
+        res.status(400).json(response);
     }
 };
 

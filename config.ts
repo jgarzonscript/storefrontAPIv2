@@ -57,6 +57,8 @@ class Config {
         return String(process.env[this.TOKENSECRET]);
     }
 
+    // this is deprecated
+    // TO-DO : remove and de-commission
     get signedToken(): string {
         return String(process.env[this.SIGNEDTOKEN]);
     }

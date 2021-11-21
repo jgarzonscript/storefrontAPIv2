@@ -18,7 +18,8 @@ app.use(cors({ origin: '*' }));
 app.use(express.json() as RequestHandler);
 
 app.get('/', function (req: Request, res: Response) {
-    res.send('hello world');
+    // res.send('hello world');
+    res.send("you've reached the store.front.project api");
 });
 
 app.get('/test', (req: Request, res: Response) => {
