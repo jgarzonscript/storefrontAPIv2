@@ -1,0 +1,23 @@
+@contentType = application/json
+
+###
+
+GET http://localhost:3000
+
+###
+
+#close order endpoint
+DELETE {{baseUrl}}/orders/10 HTTP/1.1
+authorization: bearer {{token}}
+
+
+###
+
+# create shipping endpoint
+POST {{baseUrl}}/orders/10/shipping HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "fullName": "John Doe",
+    "address" : "1 happy street"
+}

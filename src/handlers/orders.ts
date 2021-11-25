@@ -9,7 +9,7 @@ const store = new OrderStore();
  *
  * @param user_id query param
  */
-const orderByUser = async (req: Request, res: Response) => {
+const index = async (req: Request, res: Response) => {
     const userId = req.params.user_id;
 
     const response: apiResponse = {
@@ -17,7 +17,7 @@ const orderByUser = async (req: Request, res: Response) => {
     };
 
     try {
-        const order = await store.orderByUser(userId);
+        const order = await store.index(userId);
 
         if (!order) {
             response.message = 'no active orders available for this user';
@@ -85,7 +85,7 @@ const addProduct = async (req: Request, res: Response) => {
     };
 
     try {
-        const order = await store.addProduct(order_id, product_id, quantity);
+        const order = await store.addCartItem(order_id, product_id, quantity);
 
         if (!order) {
             response.message = 'unable to add product to order';
@@ -110,7 +110,7 @@ const addProduct = async (req: Request, res: Response) => {
  * @param order_id query string parameter
  * @returns all cart items from active order
  */
-const productsByOrder = async (req: Request, res: Response) => {
+const indexCartItems = async (req: Request, res: Response) => {
     const order_id = req.params.order_id;
 
     const response: apiResponse = {
@@ -118,18 +118,17 @@ const productsByOrder = async (req: Request, res: Response) => {
     };
 
     try {
-        const productsByOrder = await store.productsByOrder(order_id);
+        const cartItems = await store.indexCartItems(order_id);
 
-        if (!productsByOrder) {
-            response.message =
-                'something went wrong as nothing was recieved -- query products by order';
-            res.status(404);
-            res.json(response);
-            return;
-        }
+        // if (!cartItems.length) {
+        //     response.message = 'cart items is empty';
+        //     res.status(404);
+        //     res.json(response);
+        //     return;
+        // }
 
         response.success = true;
-        response.data = productsByOrder;
+        response.data = cartItems;
         res.json(response);
     } catch (error) {
         response.success = false;
@@ -178,7 +177,9 @@ const removeCartItem = async (req: Request, res: Response) => {
     const order_id = req.params.id,
         product_id = req.params.pid;
 
-    const response = createResponse();
+    const response: apiResponse = {
+        success: false
+    };
 
     try {
         const result = await store.removeCartItem(order_id, product_id);
@@ -201,13 +202,57 @@ const removeCartItem = async (req: Request, res: Response) => {
     }
 };
 
+const closeOrder = async (req: Request, res: Response) => {
+    const order_id = req.params.id;
+
+    const response: apiResponse = {
+        success: false
+    };
+
+    try {
+        const sqlresponse = await store.closeOrder(order_id);
+        response.success = true;
+        response.data = sqlresponse;
+        response.message = `${sqlresponse} record(s) updated`;
+        res.json(response);
+    } catch (error) {
+        response.success = false;
+        response.message = (<Error>error).message;
+        res.status(500).json(response);
+    }
+};
+
+const createShipping = async (req: Request, res: Response) => {
+    const order_id = req.params.id,
+        fullName = <string>req.body.fullName,
+        address = <string>req.body.address;
+
+    const response: apiResponse = {
+        success: false
+    };
+
+    try {
+        const sqlresponse = await store.createShipping(order_id, fullName, address);
+        response.success = true;
+        response.data = sqlresponse;
+        response.message = `${sqlresponse} record(s) updated`;
+        res.json(response);
+    } catch (error) {
+        response.success = false;
+        response.message = (<Error>error).message;
+        res.status(500).json(response);
+    }
+};
+
 const orderRoutes = (app: express.Application) => {
-    app.get('/orderbyuser/:user_id', verifyAuthToken, orderByUser); //TO-DO; change route to proper route /orders/:user_id
+    app.get('/orders/:user_id', verifyAuthToken, index);
     app.post('/orders/:user_id', verifyAuthToken, create);
     app.post('/orders/:id/products', addProduct);
-    app.get('/orders/:order_id/products', productsByOrder); // aka cart items // to-do: rename to cart-items
+    app.get('/orders/:order_id/products', indexCartItems);
     app.patch('/orders/:order_id/products', verifyAuthToken, updateCartItem);
     app.delete('/orders/:id/products/:pid', verifyAuthToken, removeCartItem);
+    app.delete('/orders/:id/', verifyAuthToken, closeOrder);
+    app.post('/orders/:id/shipping', verifyAuthToken, createShipping);
 };
 
 export default orderRoutes;

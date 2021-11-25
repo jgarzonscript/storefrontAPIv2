@@ -3,3 +3,7 @@ build
 .env
 dist/
 types/
+# http-requests/
+
+# local vscode settings
+.vscode/
