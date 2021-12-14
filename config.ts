@@ -45,6 +45,10 @@ class Config {
         return db;
     }
 
+    get connectionString(): string {
+        return <string>process.env.DATABASE_URL;
+    }
+
     get pepper(): string {
         return String(process.env[this.BCRYPT]);
     }

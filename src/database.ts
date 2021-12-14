@@ -2,8 +2,9 @@ import { Pool, Client } from 'pg';
 import { config } from '../config';
 
 export const client = new Pool({
-    user: config.user,
-    host: config.host,
-    database: config.database,
-    password: config.pass
+    // user: config.user,
+    // host: config.host,
+    // database: config.database,
+    // password: config.pass
+    connectionString: config.connectionString
 });
