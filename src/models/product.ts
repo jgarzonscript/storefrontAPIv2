@@ -11,6 +11,13 @@ export type Product = {
 };
 
 export class ProductStore {
+    private handleError(internalError: unknown): Error {
+        const e = new Error();
+        e.message = `error in models/order; ${(<Error>internalError).message}`;
+        e.stack = (<Error>internalError).stack;
+        return e;
+    }
+
     async index(): Promise<Product[]> {
         try {
             const sql = 'select * from products;',
@@ -23,6 +30,19 @@ export class ProductStore {
             e.message = `unable to retrieve products > ${(error as Error).message}`;
             e.stack = (error as Error).stack;
             throw e;
+        }
+    }
+
+    async indexId(product_id: string): Promise<Product> {
+        try {
+            const sql = 'select * from products where id = $1;',
+                conn = await client.connect(),
+                query = await conn.query(sql, [product_id]);
+            conn.release();
+            const product = query.rows.length ? query.rows[0] : null;
+            return product;
+        } catch (error) {
+            throw this.handleError(error);
         }
     }
 
@@ -48,38 +68,39 @@ export class ProductStore {
         }
     }
 
-    async show(id: number): Promise<Product> {
-        try {
-            const sql = 'select * from products where id = $1;',
-                conn = await client.connect(),
-                result = await conn.query(sql, [id]);
-            conn.release();
-            const product: Product = result.rows[0];
+    // decommissioned
+    // async show(id: number): Promise<Product> {
+    //     try {
+    //         const sql = 'select * from products where id = $1;',
+    //             conn = await client.connect(),
+    //             result = await conn.query(sql, [id]);
+    //         conn.release();
+    //         const product: Product = result.rows[0];
 
-            /* the following logic is for popular products */
-            if (product) {
-                let seen = 1;
-                if (Number.isInteger(product.seen)) {
-                    seen = parseInt(String(product.seen));
-                    seen++;
-                }
+    //         /* the following logic is for popular products */
+    //         if (product) {
+    //             let seen = 1;
+    //             if (Number.isInteger(product.seen)) {
+    //                 seen = parseInt(String(product.seen));
+    //                 seen++;
+    //             }
 
-                const sql = 'update products set seen = $1 where id = $2;',
-                    conn = await client.connect(),
-                    result = await conn.query(sql, [seen, product.id]);
-                conn.release();
-                product.seen = seen;
-            }
+    //             const sql = 'update products set seen = $1 where id = $2;',
+    //                 conn = await client.connect(),
+    //                 result = await conn.query(sql, [seen, product.id]);
+    //             conn.release();
+    //             product.seen = seen;
+    //         }
 
-            return product;
-        } catch (error) {
-            const e = new Error(
-                `unable to retrieve product [with id ${id}] > ${(error as Error).message}`
-            );
-            e.stack = (error as Error).stack;
-            throw e;
-        }
-    }
+    //         return product;
+    //     } catch (error) {
+    //         const e = new Error(
+    //             `unable to retrieve product [with id ${id}] > ${(error as Error).message}`
+    //         );
+    //         e.stack = (error as Error).stack;
+    //         throw e;
+    //     }
+    // }
 
     async update(product: Product): Promise<Product> {
         try {

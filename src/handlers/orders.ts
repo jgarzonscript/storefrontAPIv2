@@ -77,8 +77,8 @@ const create = async (req: Request, res: Response) => {
  */
 const addProduct = async (req: Request, res: Response) => {
     const order_id = req.params.id,
-        product_id = String(req.body.product_id),
-        quantity = String(req.body.quantity);
+        product_id = String(req.body.productId),
+        quantity = String(req.body.qty);
 
     const response: apiResponse = {
         success: false
@@ -105,36 +105,24 @@ const addProduct = async (req: Request, res: Response) => {
     }
 };
 
-/**
- * To-Do : rename this function as cart-items
- * @param order_id query string parameter
- * @returns all cart items from active order
- */
-const indexCartItems = async (req: Request, res: Response) => {
-    const order_id = req.params.order_id;
+const indexCartItemsv2 = async (req: Request, res: Response) => {
+    const order_id = req.params.id;
+    // user_id = req.params.user_id;
 
     const response: apiResponse = {
         success: false
     };
 
     try {
-        const cartItems = await store.indexCartItems(order_id);
-
-        // if (!cartItems.length) {
-        //     response.message = 'cart items is empty';
-        //     res.status(404);
-        //     res.json(response);
-        //     return;
-        // }
-
+        const cartItems = await store.indexCartItemsv2(order_id);
         response.success = true;
         response.data = cartItems;
         res.json(response);
     } catch (error) {
         response.success = false;
-        response.error = error as Error;
-        response.message = (error as Error).message;
-        res.status(400).json(response);
+        response.message = (<Error>error).message;
+        response.stackTrace = (<Error>error).stack;
+        res.status(500).json(response);
     }
 };
 
@@ -156,7 +144,7 @@ const updateCartItem = async (req: Request, res: Response) => {
         const updateResult = await store.updateCartItem(order_id, product_id, qty);
 
         if (!updateResult) {
-            response.message = `something went wrong as nothing was recieved; nothing was updated!; updateCartItem()`;
+            response.message = `nothing was updated!; '/orders/:id/products'`;
             res.status(404);
             res.json(response);
             return;
@@ -248,7 +236,8 @@ const orderRoutes = (app: express.Application) => {
     app.get('/orders/:user_id', verifyAuthToken, index);
     app.post('/orders/:user_id', verifyAuthToken, create);
     app.post('/orders/:id/products', addProduct);
-    app.get('/orders/:order_id/products', indexCartItems);
+    // app.get('/orders/:order_id/products', indexCartItems); // TODO: deprecate this, next endpoint is the successor
+    app.get('/orders/:id/products', indexCartItemsv2); // retrieve cartItems
     app.patch('/orders/:order_id/products', verifyAuthToken, updateCartItem);
     app.delete('/orders/:id/products/:pid', verifyAuthToken, removeCartItem);
     app.delete('/orders/:id/', verifyAuthToken, closeOrder);

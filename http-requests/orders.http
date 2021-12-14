@@ -25,4 +25,4 @@ Content-Type: {{contentType}}
 ###
 
 # get cart items (v2)
-GET {{baseUrl}}/orders/13/products/1 HTTP/1.1
+GET {{baseUrl}}/orders/17/products HTTP/1.1

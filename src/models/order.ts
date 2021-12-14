@@ -68,22 +68,17 @@ export class OrderStore {
         }
     }
 
-    async indexCartItems(order_id: string): Promise<CartItems[]> {
+    async indexCartItemsv2(order_id: string): Promise<CartItems[]> {
         try {
-            const sql = 'select * from ordersdetail where order_id = $1;',
+            const sql =
+                    "select od.* from ordersdetail od inner join orders o on o.id=od.order_id where o.status = 'active' and o.id = $1;", // and o.user_id = $2;",
                 conn = await client.connect(),
-                result = await conn.query(sql, [order_id]);
+                query = await conn.query(sql, [order_id]);
             conn.release();
-
-            const productsByOrder: CartItems[] = result.rows;
-            return productsByOrder;
+            const cartItems: CartItems[] = query.rows;
+            return cartItems;
         } catch (error) {
-            const e = new Error();
-            e.message = `unable to process query 'products by order' -- ${
-                (error as Error).message
-            }`;
-            e.stack = (error as Error).stack;
-            throw e;
+            throw this.handleError(error);
         }
     }
 

@@ -3,6 +3,7 @@ export type apiResponse = {
     data?: any;
     error?: Error;
     message?: string;
+    stackTrace?: string;
 };
 
 export const createResponse = () => {

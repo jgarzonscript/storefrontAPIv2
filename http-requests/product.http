@@ -1,0 +1,5 @@
+@contentType = application/json
+
+###
+
+GET {{baseUrl}}/products/3 HTTP/1.1
