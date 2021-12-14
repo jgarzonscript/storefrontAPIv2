@@ -1,13 +1,12 @@
 import express, { Request, RequestHandler, response, Response } from 'express';
 import bodyParser from 'body-parser';
 
-import { port } from '../config';
 import productRoutes from './handlers/products';
 import userRoutes from './handlers/users';
 import orderRoutes from './handlers/orders';
 import categoryRoutes from './handlers/category';
 
-import { config } from '../config';
+import { config, port } from '../config';
 
 import cors from 'cors';
 
@@ -18,15 +17,15 @@ app.use(cors({ origin: '*' }));
 app.use(express.json() as RequestHandler);
 
 app.get('/', function (req: Request, res: Response) {
-    // res.send('hello world');
-    res.send("you've reached the store.front.project api");
+    res.send("you've reached the end of the internet!\n");
 });
 
-app.get('/test', (req: Request, res: Response) => {
+app.get('/conninfo', (req: Request, res: Response) => {
     try {
         const environment = config.env;
         const database = config.database;
-        res.json({ environment, database });
+        const connectionString = config.connectionString;
+        res.json({ connectionString });
     } catch (error) {
         res.json(error);
     }
@@ -37,7 +36,7 @@ userRoutes(app);
 orderRoutes(app);
 categoryRoutes(app);
 
-app.listen(3000, function () {
+app.listen(port, function () {
     console.log(`starting app on: ${address}`);
 });
 

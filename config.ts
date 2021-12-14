@@ -2,7 +2,7 @@ import { config as _conf } from 'dotenv';
 
 _conf();
 
-export const port = process.env.PORT;
+export const port = process.env.PORT || 5000;
 
 class Config {
     private ENVIRONMENT = 'ENV';
