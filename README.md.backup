@@ -40,12 +40,16 @@ GRANT ALL PRIVILEGES ON DATABASE <postgress test database> TO <postgres user>;
 
 ### Setup our environmental variables and connection strings
 
-Inside our project, rename file '.env.dummy' to just '.env'<br>
+Inside our project, rename file '.env.dummy' to just '.env'
 set the following environmental variables:
 
 ```
 DATABASE_URL=<postgresql://username:password@localhost:5432/mydb>
+<!-- PG_DB=<database name>
+PG_USER=<postgres user>
+PG_PWD=<postgres pass> -->
 
+<!-- PG_DB_TEST=<postgres test database>  // not required unless running tests -->
 ```
 
 set the following encryption keys:
