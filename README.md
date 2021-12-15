@@ -14,28 +14,19 @@ We need to setup a few items to get started
 
 ### Setup our database
 
-connect to your postgres server [ main database ] via commandline as a superuser - or - a user with createdb role
+connect to your postgres server:
 
 ```
 psql postgres
 ```
 
-
-create the user AND database:
+<br>
+ create the user AND database:
 
 ```
 CREATE USER <postgres user> WITH PASSWORD 'password123';
 CREATE DATABASE <postgres database>;
 GRANT ALL PRIVILEGES ON DATABASE <postgres database> TO <postgres user>;
-```
-
-
-// the following test database settings are optional!
-create the test database and grant access:
-
-```
-CREATE DATABASE <postgress test database>;
-GRANT ALL PRIVILEGES ON DATABASE <postgress test database> TO <postgres user>;
 ```
 
 ### Setup our environmental variables and connection strings
@@ -45,9 +36,8 @@ set the following environmental variables:
 
 ```
 DATABASE_URL=<postgresql://username:password@localhost:5432/mydb>
-
 ```
-
+<br>
 set the following encryption keys:
 
 ```
@@ -64,14 +54,14 @@ Install all modules
 npm install
 ```
 
-
+<br>
 Have db-migrate provision all the tables in postgres
 
 ```
 npm run dbmigrateup
 ```
 
-
+<br>
 Start the server
 
 ```
@@ -79,7 +69,7 @@ npm start // normal startup
 npm run nodemon // nodemon init
 ```
 
-
+<br>
 Your api server is ready @ port 3000:
 
 ```
