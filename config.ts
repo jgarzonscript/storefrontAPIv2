@@ -46,7 +46,9 @@ class Config {
     }
 
     get connectionString(): string {
-        return <string>process.env.DATABASE_URL;
+        const databaseURL = <string>process.env.DATABASE_URL;
+        this.env === 'production' && `${databaseURL}?sslmode=require`;
+        return databaseURL;
     }
 
     get pepper(): string {
