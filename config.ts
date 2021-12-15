@@ -46,8 +46,12 @@ class Config {
     }
 
     get connectionString(): string {
-        const databaseURL = <string>process.env.DATABASE_URL;
-        this.env === 'production' && `${databaseURL}?sslmode=require`;
+        let databaseURL = <string>process.env.DATABASE_URL,
+            isProduction = this.env === 'production';
+
+        if (isProduction) {
+            databaseURL = `${databaseURL}?sslmode=require`;
+        }
         return databaseURL;
     }
 
