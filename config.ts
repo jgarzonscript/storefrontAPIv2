@@ -49,9 +49,9 @@ class Config {
         let databaseURL = <string>process.env.DATABASE_URL,
             isProduction = this.env === 'production';
 
-        if (isProduction) {
-            databaseURL = `${databaseURL}?sslmode=require`;
-        }
+        // if (isProduction) {
+        //     databaseURL = `${databaseURL}?sslmode=require`;
+        // }
         return databaseURL;
     }
 
