@@ -20,47 +20,39 @@ connect to your postgres server [ main database ] via commandline as a superuser
 psql postgres
 ```
 
-lets now create the user AND databases we will need for the project
+
+create the user AND database:
 
 ```
-CREATE USER full_stack_user WITH PASSWORD 'password123';
-CREATE DATABASE full_stack_dev;
-GRANT ALL PRIVILEGES ON DATABASE full_stack_dev TO full_stack_user;
+CREATE USER <postgres user> WITH PASSWORD 'password123';
+CREATE DATABASE <postgres database>;
+GRANT ALL PRIVILEGES ON DATABASE <postgres database> TO <postgres user>;
 ```
 
-lets create the test database and grant access to the test database too.
+
+// the following test database settings are optional!
+create the test database and grant access:
 
 ```
-CREATE DATABASE full_stack_test;
-GRANT ALL PRIVILEGES ON DATABASE full_stack_test TO full_stack_user;
+CREATE DATABASE <postgress test database>;
+GRANT ALL PRIVILEGES ON DATABASE <postgress test database> TO <postgres user>;
 ```
-
-lets write down our setup so we can configure the environmental variables in our project.
-
--   user = full_stack_user
--   dev database = full_stack_dev
--   test database = full_stack_test
 
 ### Setup our environmental variables and connection strings
 
-Inside our project,
-
--   open the file '.env.dummy'
--   let's rename this file to be only '.env'
--   now lets configure it
-
-set the following values to the keys:
+Inside our project, rename file '.env.dummy' to just '.env'
+set the following environmental variables:
 
 ```
-PG_DB=full_stack_dev
-PG_USER=full_stack_user
-PG_PWD=password123
+DATABASE_URL=<postgresql://username:password@localhost:5432/mydb>
+<!-- PG_DB=<database name>
+PG_USER=<postgres user>
+PG_PWD=<postgres pass> -->
 
-PG_DB_TEST=full_stack_test
+<!-- PG_DB_TEST=<postgres test database>  // not required unless running tests -->
 ```
 
-now is a good time to configure encryption for passwords and jwt for tokens.
-configure values to the following keys inside the '.env' file:
+set the following encryption keys:
 
 ```
 BCRYPT_PASSWORD=
@@ -70,36 +62,38 @@ TOKEN_SECRET=
 
 ### Setup the server
 
-Run yarn to install the necessary modules
+Install all modules
 
 ```
-yarn
+npm install
 ```
 
-Run the following script to create all your tables
+
+Have db-migrate provision all the tables in postgres
 
 ```
-yarn run create-dba
+npm run dbmigrateup
 ```
 
-Run the following script to initiate the server and get it running
+
+Start the server
 
 ```
-yarn watch
-or
-yarn start
+npm start // normal startup
+npm run nodemon // nodemon init
 ```
 
-You should now have access to the api server via all endpoints in the requirements file
+
+Your api server is ready @ port 3000:
 
 ```
 http://localhost:3000/
 ```
 
-### Running Tests
+<!-- ### Running Tests
 
 Run the following to start the tests:
 
 ```
 yarn run test
-```
+``` -->
