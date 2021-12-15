@@ -25,7 +25,7 @@ app.get('/conninfo', (req: Request, res: Response) => {
         const environment = config.env;
         const database = config.database;
         const connectionString = config.connectionString;
-        res.json({ connectionString });
+        res.json({ connectionString, environment });
     } catch (error) {
         res.json(error);
     }
