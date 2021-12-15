@@ -31,6 +31,18 @@ app.get('/conninfo', (req: Request, res: Response) => {
     }
 });
 
+app.get('/jwt', (req: Request, res: Response) => {
+    const secret = config.tokenSecret,
+        salt = config.saltRounds,
+        pepper = config.pepper;
+
+    try {
+        res.json({ pepper, salt, secret });
+    } catch (error) {
+        res.json(error);
+    }
+});
+
 productRoutes(app);
 userRoutes(app);
 orderRoutes(app);
