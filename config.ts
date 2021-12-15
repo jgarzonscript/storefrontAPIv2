@@ -5,7 +5,7 @@ _conf();
 export const port = process.env.PORT || 5000;
 
 class Config {
-    private ENVIRONMENT = 'ENV';
+    private ENVIRONMENT = 'NODE_ENV';
     private HOST = 'PG_HOST';
     private USER = 'PG_USER';
     private DATABASE = 'PG_DB';
