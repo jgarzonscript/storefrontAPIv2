@@ -4,7 +4,8 @@
     "description": "",
     "main": "server.ts",
     "scripts": {
-        "start": "ts-node src/server.ts",
+        "build": "tsc --build tsconfig.json",
+        "start": "node ./dist/src/server.js",
         "watch": "tsc-watch --esModuleInterop src/server.ts --target es2015 --module commonjs --outDir ./dist --onSuccess 'node ./dist/src/server.js'",
         "jasmine": "ENV=test jasmine-ts",
         "tsc": "tsc",
